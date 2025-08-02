@@ -3,7 +3,6 @@ FROM debian:bullseye-slim
 RUN apt-get update && apt-get install -y curl unzip bash dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
-# Download & install Alloy (v1.0.0 as example)
 ENV ALLOY_VERSION="v1.0.0"
 ENV ALLOY_ZIP="alloy-linux-amd64.zip"
 ENV ALLOY_URL="https://github.com/grafana/alloy/releases/download/${ALLOY_VERSION}/${ALLOY_ZIP}"
@@ -17,8 +16,6 @@ RUN curl -L -o /tmp/${ALLOY_ZIP} ${ALLOY_URL} \
 COPY agent-config.river /etc/alloy-config.river
 COPY start.sh /start.sh
 
-# strip BOM & ensure LF endings
 RUN dos2unix /start.sh && chmod +x /start.sh
 
-# explicitly invoke via bash
 CMD ["bash", "/start.sh"]

@@ -2,10 +2,8 @@ logging {
   level = "info"
 }
 
-server "default" {
-  log_level        = "info"
-  http_listen_address = "0.0.0.0"
-  http_listen_port    = env("PORT")
+http.listen "web" {
+  listen_address = "0.0.0.0:${env("PORT")}"
 }
 
 prometheus.remote_write "grafanacloud" {
@@ -30,13 +28,11 @@ prometheus.scrape "fastapi_app" {
   scrape_interval = "15s"
   scrape_timeout = "10s"
 
-  
   tls_config {
     insecure_skip_verify = true
   }
   forward_to = [prometheus.remote_write.grafanacloud.receiver]
 }
-
 
 prometheus.scrape "agent_metrics" {
   targets = [
@@ -44,4 +40,3 @@ prometheus.scrape "agent_metrics" {
   ]
   forward_to = [prometheus.remote_write.grafanacloud.receiver]
 }
-
