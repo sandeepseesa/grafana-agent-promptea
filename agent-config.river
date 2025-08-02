@@ -1,0 +1,41 @@
+logging {
+  level = "info"
+}
+
+prometheus.remote_write "grafanacloud" {
+  endpoint {
+    url = "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom/push"
+    basic_auth {
+      username = "${GRAFANA_CLOUD_USERNAME}"
+      password = "${GRAFANA_CLOUD_API_KEY}"
+    }
+  }
+
+  external_labels = {
+    "job" = "promptea-server-metrics",
+    "instance" = "promptea-metrics",
+  }
+}
+
+prometheus.scrape "fastapi_app" {
+  targets = [
+    {"__address__" = "sandeepseesa-promptea-server.hf.space", "__scheme__" = "https"},
+  ]
+  scrape_interval = "15s"
+  scrape_timeout = "10s"
+
+  
+  tls_config {
+    insecure_skip_verify = true
+  }
+  forward_to = [prometheus.remote_write.grafanacloud.receiver]
+}
+
+
+prometheus.scrape "agent_metrics" {
+  targets = [
+    {"__address__" = "127.0.0.1:12345", "__scheme__" = "http"},
+  ]
+  forward_to = [prometheus.remote_write.grafanacloud.receiver]
+}
+
