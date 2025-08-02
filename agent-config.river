@@ -2,9 +2,12 @@ logging {
   level = "info"
 }
 
-http.listen "web" {
-  listen_address = "0.0.0.0:" + env("PORT")
+server "default" {
+  log_level          = "info"
+  http_listen_address = "0.0.0.0"
+  http_listen_port    = env("PORT")
 }
+
 
 prometheus.remote_write "grafanacloud" {
   endpoint {
