@@ -3,7 +3,7 @@ logging {
 }
 
 http.listen "web" {
-  listen_address = "0.0.0.0:${env("PORT")}"
+  listen_address = "0.0.0.0:" + env("PORT")
 }
 
 prometheus.remote_write "grafanacloud" {
