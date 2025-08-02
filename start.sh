@@ -1,2 +1,5 @@
 echo ">> Starting Grafana Alloy (Flow Mode)"
-/usr/bin/alloy run /etc/alloy-config.river
+exec /usr/bin/alloy run \
+  --server.http.listen-addr=0.0.0.0:${PORT} \
+  /etc/alloy-config.river
+
