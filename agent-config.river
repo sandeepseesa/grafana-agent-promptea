@@ -8,10 +8,6 @@ server "default" {
   http_listen_port    = env("PORT")
 }
 
-prometheus.scrape "default" {
-  ...
-}
-
 prometheus.remote_write "grafanacloud" {
   endpoint {
     url = "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom/push"
